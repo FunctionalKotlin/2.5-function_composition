@@ -20,14 +20,14 @@ fun getValidPrices(values: List<String>): List<Int> = values.mapNotNull { it.toI
 
 fun getFormatter(locale: Locale): NumberFormat = NumberFormat.getCurrencyInstance(locale)
 
-fun formatPrice(locale: Locale, price: Int): String {
+fun formatPrice(price: Int): String {
     if (price == 0) {
         return "Free"
     } else {
-        return getFormatter(locale).format(price)
+        return getFormatter(Locale("es", "ES")).format(price)
     }
 }
 
 fun formatPrices(json: String): List<String> =
     getValidPrices(parseJson(json))
-        .map { formatPrice(Locale("es", "ES"), it) }
+        .map(::formatPrice)
