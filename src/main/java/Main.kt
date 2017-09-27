@@ -30,6 +30,8 @@ fun formatPrice(price: Int): String {
 
 fun formatAll(prices: List<Int>): List<String> = prices.map(::formatPrice)
 
-fun parseAndGetValid(json: String): List<Int> = getValidPrices(parseJson(json))
+fun parseAndGetValid(json: String): List<Int> = combine(::parseJson, ::getValidPrices)(json)
 
-fun formatPrices(json: String): List<String> = formatAll(parseAndGetValid(json))
+fun formatPrices(json: String): List<String> = combine(::parseAndGetValid, ::formatAll)(json)
+
+fun <T, U, V> combine(firstStep: (T) -> U, secondStep: (U) -> V): (T) -> V = { t -> secondStep(firstStep(t))}
