@@ -30,6 +30,15 @@ fun getValidPrices(values: List<String>): List<Int> {
     return prices
 }
 
+fun formatPrice(locale: Locale, price: Int): String {
+    if (price == 0) {
+        return "Free"
+    } else {
+        val formatter = NumberFormat.getCurrencyInstance(locale)
+
+        return formatter.format(price)
+    }
+}
 
 fun formatPrices(json: String): List<String> {
     val jsonArray = parseJson(json)
@@ -39,17 +48,7 @@ fun formatPrices(json: String): List<String> {
     val labels = mutableListOf<String>()
 
     for (price in prices) {
-        var label: String = ""
-
-        if (price == 0) {
-            label = "Free"
-        } else {
-            val formatter = NumberFormat.getCurrencyInstance(Locale("es", "ES"))
-
-            label = formatter.format(price)
-        }
-
-        labels.add(label)
+        labels.add(formatPrice(Locale("es", "ES"), price))
     }
 
     return labels
