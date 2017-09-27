@@ -16,28 +16,40 @@ fun main(args: Array<String>) {
 fun parseJson(json: String): List<String> =
     (Parser().parse(StringBuilder(json)) as JsonArray<String>).toList()
 
+fun getValidPrices(values: List<String>): List<Int> {
+    val prices = mutableListOf<Int>()
+
+    for (value in values) {
+        val price = value.toIntOrNull()
+
+        if (price != null) {
+            prices.add(price)
+        }
+    }
+
+    return prices
+}
+
 
 fun formatPrices(json: String): List<String> {
     val jsonArray = parseJson(json)
 
+    val prices = getValidPrices(jsonArray)
+
     val labels = mutableListOf<String>()
 
-    for (element in jsonArray) {
-        val price = element.toIntOrNull()
+    for (price in prices) {
+        var label: String = ""
 
-        if (price != null) {
-            var label: String = ""
+        if (price == 0) {
+            label = "Free"
+        } else {
+            val formatter = NumberFormat.getCurrencyInstance(Locale("es", "ES"))
 
-            if (price == 0) {
-                label = "Free"
-            } else {
-                val formatter = NumberFormat.getCurrencyInstance(Locale("es", "ES"))
-
-                label = formatter.format(price)
-            }
-
-            labels.add(label)
+            label = formatter.format(price)
         }
+
+        labels.add(label)
     }
 
     return labels
