@@ -13,8 +13,12 @@ fun main(args: Array<String>) {
     println("The list of prices is: $formattedPrices")
 }
 
+fun parseJson(json: String): List<String> =
+    (Parser().parse(StringBuilder(json)) as JsonArray<String>).toList()
+
+
 fun formatPrices(json: String): List<String> {
-    val jsonArray = (Parser().parse(StringBuilder(json)) as JsonArray<String>).toList()
+    val jsonArray = parseJson(json)
 
     val labels = mutableListOf<String>()
 
