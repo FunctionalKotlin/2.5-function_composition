@@ -28,16 +28,6 @@ fun formatPrice(locale: Locale, price: Int): String {
     }
 }
 
-fun formatPrices(json: String): List<String> {
-    val jsonArray = parseJson(json)
-
-    val prices = getValidPrices(jsonArray)
-
-    val labels = mutableListOf<String>()
-
-    for (price in prices) {
-        labels.add(formatPrice(Locale("es", "ES"), price))
-    }
-
-    return labels
-}
+fun formatPrices(json: String): List<String> =
+    getValidPrices(parseJson(json))
+        .map { formatPrice(Locale("es", "ES"), it) }
