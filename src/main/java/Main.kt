@@ -8,7 +8,9 @@ import java.util.*
 fun main(args: Array<String>) {
     val prices = "[\"10\", \"5\", \"null\", \"20\", \"0\"]"
 
-    val formatPrices = ::parseJson andThen ::getValidPrices andThen ::formatAll
+    val formatAllToEuro = formatAll(Locale("es", "ES"))
+
+    val formatPrices = ::parseJson andThen ::getValidPrices andThen formatAllToEuro
 
     println(prices.let(formatPrices))
 }
@@ -20,16 +22,14 @@ fun getValidPrices(values: List<String>): List<Int> = values.mapNotNull { it.toI
 
 fun getFormatter(locale: Locale): NumberFormat = NumberFormat.getCurrencyInstance(locale)
 
-fun formatPrice(price: Int): String {
+fun formatPrice(locale: Locale): (Int) -> String = { price ->
     if (price == 0) {
-        return "Free"
+        "Free"
     } else {
-        return getFormatter(Locale("es", "ES")).format(price)
+        getFormatter(locale).format(price)
     }
 }
 
-fun formatAll(prices: List<Int>): List<String> = prices.map(::formatPrice)
-
-fun parseAndGetValid(json: String): List<Int> = (::parseJson andThen ::getValidPrices)(json)
+fun formatAll(locale: Locale): (List<Int>) -> List<String> = { it.map(formatPrice(locale)) }
 
 infix fun <T, U, V> ((T) -> U).andThen(after: (U) -> V): (T) -> V = { t -> after(this(t))}
