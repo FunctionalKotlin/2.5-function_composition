@@ -8,9 +8,9 @@ import java.util.*
 fun main(args: Array<String>) {
     val prices = "[\"10\", \"5\", \"null\", \"20\", \"0\"]"
 
-    val formattedPrices = formatPrices(prices)
+    val formatPrices = ::parseJson andThen ::getValidPrices andThen ::formatAll
 
-    println("The list of prices is: $formattedPrices")
+    println(prices.let(formatPrices))
 }
 
 fun parseJson(json: String): List<String> =
@@ -30,8 +30,6 @@ fun formatPrice(price: Int): String {
 
 fun formatAll(prices: List<Int>): List<String> = prices.map(::formatPrice)
 
-fun parseAndGetValid(json: String): List<Int> = (::parseJson combine ::getValidPrices)(json)
+fun parseAndGetValid(json: String): List<Int> = (::parseJson andThen ::getValidPrices)(json)
 
-fun formatPrices(json: String): List<String> = (::parseAndGetValid combine ::formatAll)(json)
-
-infix fun <T, U, V> ((T) -> U).combine(secondStep: (U) -> V): (T) -> V = { t -> secondStep(this(t))}
+infix fun <T, U, V> ((T) -> U).andThen(after: (U) -> V): (T) -> V = { t -> after(this(t))}
