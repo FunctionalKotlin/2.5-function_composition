@@ -16,19 +16,7 @@ fun main(args: Array<String>) {
 fun parseJson(json: String): List<String> =
     (Parser().parse(StringBuilder(json)) as JsonArray<String>).toList()
 
-fun getValidPrices(values: List<String>): List<Int> {
-    val prices = mutableListOf<Int>()
-
-    for (value in values) {
-        val price = value.toIntOrNull()
-
-        if (price != null) {
-            prices.add(price)
-        }
-    }
-
-    return prices
-}
+fun getValidPrices(values: List<String>): List<Int> = values.mapNotNull { it.toIntOrNull() }
 
 fun getFormatter(locale: Locale): NumberFormat = NumberFormat.getCurrencyInstance(locale)
 
