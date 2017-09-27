@@ -28,6 +28,6 @@ fun formatPrice(price: Int): String {
     }
 }
 
-fun formatPrices(json: String): List<String> =
-    getValidPrices(parseJson(json))
-        .map(::formatPrice)
+fun formatAll(prices: List<Int>): List<String> = prices.map(::formatPrice)
+
+fun formatPrices(json: String): List<String> = formatAll(getValidPrices(parseJson(json)))
