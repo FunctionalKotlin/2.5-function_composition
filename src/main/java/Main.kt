@@ -30,13 +30,13 @@ fun getValidPrices(values: List<String>): List<Int> {
     return prices
 }
 
+fun getFormatter(locale: Locale): NumberFormat = NumberFormat.getCurrencyInstance(locale)
+
 fun formatPrice(locale: Locale, price: Int): String {
     if (price == 0) {
         return "Free"
     } else {
-        val formatter = NumberFormat.getCurrencyInstance(locale)
-
-        return formatter.format(price)
+        return getFormatter(locale).format(price)
     }
 }
 
